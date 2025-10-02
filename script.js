@@ -23,6 +23,7 @@ function updateCategoryOptions(){
   catSelect.innerHTML='<option value="">Pilih Kategori</option>';
   categories.forEach(c=>{ catSelect.innerHTML+=`<option value="${c}">${c}</option>`; });
 }
+
 function handleTransactionSubmit(e){
   e.preventDefault();
   const transaction={
@@ -41,6 +42,7 @@ function handleTransactionSubmit(e){
   updateBalance(); updateTransactionList(); updateDailyView();
   alert('Transaksi berhasil disimpan!');
 }
+
 function handleTransfer(e){
   e.preventDefault();
   const from=document.getElementById('transferFrom').value;
@@ -98,40 +100,81 @@ function updateBalance(){
   document.getElementById('totalDebt').textContent='Rp '+totalDebt.toLocaleString('id-ID');
 }
 
+/* ---------------- TRANSAKSI ---------------- */
 function updateTransactionList(){
   const list=document.getElementById('transactionList');
   list.innerHTML='';
   transactions.slice().reverse().forEach(t=>{
     const item=document.createElement('div');
     item.className='transaction-item';
+
     const info=document.createElement('div');
     info.className='transaction-info';
     const desc=document.createElement('div');
     desc.className='transaction-description';
-    if(t.type==='transfer'){
-      desc.textContent='🔄 '+t.description;
-    }else{
-      desc.textContent=t.description+' ('+t.category+')';
-    }
+    if(t.type==='transfer'){ desc.textContent='🔄 '+t.description; }
+    else{ desc.textContent=t.description+' ('+t.category+')'; }
     const date=document.createElement('div');
     date.className='transaction-date';
     date.textContent=t.date+' | '+(t.payment||'');
     info.appendChild(desc); info.appendChild(date);
+
     const amount=document.createElement('div');
     amount.className='transaction-amount '+(t.type==='income'?'income':t.type==='expense'?'expense':'transfer');
     if(t.type==='transfer'){ amount.textContent='Rp '+t.amount.toLocaleString('id-ID'); }
     else{ amount.textContent=(t.type==='income'?'+ ':'- ')+'Rp '+t.amount.toLocaleString('id-ID'); }
-    item.appendChild(info); item.appendChild(amount);
+
+    const actions=document.createElement('div');
+    actions.className='transaction-actions';
+    const editBtn=document.createElement('button');
+    editBtn.className='btn-small';
+    editBtn.textContent='✏️ Edit';
+    editBtn.onclick=()=>editTransaction(t.id);
+    const deleteBtn=document.createElement('button');
+    deleteBtn.className='btn-small danger';
+    deleteBtn.textContent='🗑️ Hapus';
+    deleteBtn.onclick=()=>deleteTransaction(t.id);
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+
+    item.appendChild(info);
+    item.appendChild(amount);
+    item.appendChild(actions);
     list.appendChild(item);
   });
 }
 
+function editTransaction(id){
+  const tx=transactions.find(t=>t.id===id);
+  if(!tx) return;
+  document.getElementById('transactionType').value=tx.type;
+  updateCategoryOptions();
+  document.getElementById('transactionAmount').value=tx.amount;
+  document.getElementById('transactionDescription').value=tx.description;
+  document.getElementById('transactionCategory').value=tx.category;
+  document.getElementById('transactionPayment').value=tx.payment;
+  document.getElementById('transactionDate').value=tx.date;
+  transactions=transactions.filter(t=>t.id!==id);
+  localStorage.setItem('transactions',JSON.stringify(transactions));
+  updateBalance(); updateTransactionList(); updateDailyView();
+  alert("Silakan edit data transaksi lalu klik 'Simpan Transaksi'");
+}
+
+function deleteTransaction(id){
+  if(!confirm("Yakin mau hapus transaksi ini?")) return;
+  transactions=transactions.filter(t=>t.id!==id);
+  localStorage.setItem('transactions',JSON.stringify(transactions));
+  updateBalance(); updateTransactionList(); updateDailyView();
+}
+
+/* ---------------- HUTANG ---------------- */
 function updateDebtList(){
   const list=document.getElementById('debtList');
   list.innerHTML='';
   debts.slice().reverse().forEach(d=>{
     const item=document.createElement('div');
     item.className='debt-item';
+
     const info=document.createElement('div');
     info.className='debt-info';
     const name=document.createElement('div');
@@ -140,16 +183,51 @@ function updateDebtList(){
     const date=document.createElement('div');
     date.className='debt-date'; date.textContent=d.date;
     info.appendChild(name); info.appendChild(date);
+
     const amount=document.createElement('div');
     amount.className='debt-amount'; amount.textContent='Rp '+d.amount.toLocaleString('id-ID');
+
+    const actions=document.createElement('div');
+    actions.className='debt-actions';
     const payBtn=document.createElement('button');
     payBtn.className='btn-small'; payBtn.textContent='Lunas';
     payBtn.onclick=()=>{debts=debts.filter(x=>x.id!==d.id); localStorage.setItem('debts',JSON.stringify(debts)); updateDebtList(); updateBalance();};
-    item.appendChild(info); item.appendChild(amount); item.appendChild(payBtn);
+    const editBtn=document.createElement('button');
+    editBtn.className='btn-small'; editBtn.textContent='✏️ Edit';
+    editBtn.onclick=()=>editDebt(d.id);
+    const deleteBtn=document.createElement('button');
+    deleteBtn.className='btn-small danger'; deleteBtn.textContent='🗑️ Hapus';
+    deleteBtn.onclick=()=>deleteDebt(d.id);
+    actions.appendChild(payBtn);
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+
+    item.appendChild(info); item.appendChild(amount); item.appendChild(actions);
     list.appendChild(item);
   });
 }
 
+function editDebt(id){
+  const debt=debts.find(d=>d.id===id);
+  if(!debt) return;
+  document.getElementById('debtName').value=debt.name;
+  document.getElementById('debtAmount').value=debt.amount;
+  document.getElementById('debtDescription').value=debt.description;
+  document.getElementById('debtDate').value=debt.date;
+  debts=debts.filter(d=>d.id!==id);
+  localStorage.setItem('debts',JSON.stringify(debts));
+  updateDebtList(); updateBalance();
+  alert("Silakan edit data hutang lalu klik 'Simpan Hutang'");
+}
+
+function deleteDebt(id){
+  if(!confirm("Yakin mau hapus hutang ini?")) return;
+  debts=debts.filter(d=>d.id!==id);
+  localStorage.setItem('debts',JSON.stringify(debts));
+  updateDebtList(); updateBalance();
+}
+
+/* ---------------- HARIAN ---------------- */
 function updateDailyView(){
   const date=document.getElementById('dailyDate').value;
   const dailyTrans=transactions.filter(t=>t.date===date);
@@ -182,6 +260,7 @@ function updateDailyView(){
   document.getElementById('dailyBalance').textContent='Rp '+(dailyIncome-dailyExpense).toLocaleString('id-ID');
 }
 
+/* ---------------- TAB ---------------- */
 function showTab(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hidden'));
