@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Keuangan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+      <div class="header">
+        <h1>💰 Catatan Keuangan</h1>
+        <p>Kelola keuanganmu dengan mudah</p>
+      </div>
+    
+      <!-- Saldo Section -->
+      <div class="balance-section">
+        <h2>Ringkasan Saldo</h2>
+        <div class="balance-grid">
+          <div class="balance-item"><div class="balance-label">Total Saldo</div><div class="balance-amount" id="totalBalance">Rp 0</div></div>
+          <div class="balance-item"><div class="balance-label">Cash</div><div class="balance-amount" id="cashBalance">Rp 0</div></div>
+          <div class="balance-item"><div class="balance-label">Saldo Digital</div><div class="balance-amount" id="digitalBalance">Rp 0</div></div>
+          <div class="balance-item"><div class="balance-label">Total Hutang</div><div class="balance-amount" id="totalDebt">Rp 0</div></div>
+        </div>
+      </div>
+    
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('transaction')">Transaksi</div>
+        <div class="tab" onclick="showTab('debt')">Hutang</div>
+        <div class="tab" onclick="showTab('daily')">Harian</div>
+      </div>
+    
+      <!-- Transaction Tab -->
+      <div id="transactionTab" class="tab-content">
+        <div class="form-section">
+          <h3>Tambah Transaksi</h3>
+          <form id="transactionForm">
+            <div class="form-group">
+              <label for="transactionType">Jenis Transaksi</label>
+              <select id="transactionType" required>
+                <option value="income">Pemasukan</option>
+                <option value="expense">Pengeluaran</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transactionAmount">Jumlah</label>
+              <input type="number" id="transactionAmount" required placeholder="Masukkan jumlah">
+            </div>
+            <div class="form-group">
+              <label for="transactionDescription">Keterangan</label>
+              <input type="text" id="transactionDescription" required placeholder="Contoh: Gaji, Makan siang, dll">
+            </div>
+            <div class="form-group">
+              <label for="transactionCategory">Kategori</label>
+              <select id="transactionCategory" required>
+                <option value="">Pilih Kategori</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transactionPayment">Metode Pembayaran</label>
+              <select id="transactionPayment" required>
+                <option value="cash">Cash</option>
+                <option value="digital">Digital (Transfer, E-Wallet)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transactionDate">Tanggal</label>
+              <input type="date" id="transactionDate" required>
+            </div>
+            <button type="submit">Simpan Transaksi</button>
+          </form>
+        </div>
+    
+        <!-- Transfer antar saldo -->
+        <div class="form-section">
+          <h3>Transfer Antar Saldo</h3>
+          <form id="transferForm">
+            <div class="form-group">
+              <label for="transferFrom">Dari</label>
+              <select id="transferFrom" required>
+                <option value="cash">Cash</option>
+                <option value="digital">Digital</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transferTo">Ke</label>
+              <select id="transferTo" required>
+                <option value="cash">Cash</option>
+                <option value="digital">Digital</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transferAmount">Jumlah</label>
+              <input type="number" id="transferAmount" required placeholder="Masukkan jumlah">
+            </div>
+            <button type="submit">Transfer</button>
+          </form>
+        </div>
+    
+        <div class="transaction-list">
+          <h3>Transaksi Terakhir</h3>
+          <div id="transactionList"></div>
+        </div>
+      </div>
+    
+      <!-- Debt Tab -->
+      <div id="debtTab" class="tab-content hidden">
+        <div class="form-section">
+          <h3>Tambah Hutang</h3>
+          <form id="debtForm">
+            <div class="form-group"><label for="debtName">Nama</label><input type="text" id="debtName" required placeholder="Nama peminjam"></div>
+            <div class="form-group"><label for="debtAmount">Jumlah</label><input type="number" id="debtAmount" required placeholder="Jumlah hutang"></div>
+            <div class="form-group"><label for="debtDescription">Keterangan</label><input type="text" id="debtDescription" placeholder="Optional"></div>
+            <div class="form-group"><label for="debtDate">Tanggal</label><input type="date" id="debtDate" required></div>
+            <button type="submit">Simpan Hutang</button>
+          </form>
+        </div>
+        <div class="debt-section">
+          <h3>Daftar Hutang</h3>
+          <div id="debtList"></div>
+        </div>
+      </div>
+    
+      <!-- Daily Tab -->
+      <div id="dailyTab" class="tab-content hidden">
+        <div class="form-section">
+          <h3>Pilih Tanggal</h3>
+          <div class="form-group"><input type="date" id="dailyDate" onchange="updateDailyView()"></div>
+        </div>
+        <div class="daily-summary">
+          <h3>Ringkasan Harian</h3>
+          <div class="summary-grid">
+            <div class="summary-item"><div class="balance-label">Total Pemasukan</div><div class="balance-amount income" id="dailyIncome">Rp 0</div></div>
+            <div class="summary-item"><div class="balance-label">Total Pengeluaran</div><div class="balance-amount expense" id="dailyExpense">Rp 0</div></div>
+            <div class="summary-item"><div class="balance-label">Saldo Harian</div><div class="balance-amount" id="dailyBalance">Rp 0</div></div>
+          </div>
+        </div>
+        <div class="transaction-list">
+          <h3>Transaksi Hari Ini</h3>
+          <div id="dailyTransactionList"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
