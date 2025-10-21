@@ -130,7 +130,7 @@ function handleDebtSubmit(e){
   document.getElementById('debtForm').reset();
   document.getElementById('debtForm').reset();
   document.getElementById('debtDate').value=new Date().toISOString().split('T')[0];
-  updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary();
+  updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary(); updateCategorySummary();
   alert('Hutang berhasil disimpan!');
   alert('Hutang berhasil disimpan!');
 }
@@ -215,7 +215,7 @@ function editTransaction(id){
   document.getElementById('transactionPayment').value=tx.payment;
   document.getElementById('transactionDate').value=tx.date;
   updateBalance(); updateTransactionList(); updateDailyView(); updateSummary(); updateCategorySummary();
-  alert("Silakan edit data transaksi lalu klik 'Simpan Transaksi'");dateBalance(); updateTransactionList(); updateDailyView(); updateSummary();
+  alert("Silakan edit data transaksi lalu klik 'Simpan Transaksi'");
   alert("Silakan edit data transaksi lalu klik 'Simpan Transaksi'");
 }
 
@@ -251,7 +251,7 @@ function updateDebtList(){
     actions.className='debt-actions';
     const payBtn=document.createElement('button');
     payBtn.className='btn-small'; payBtn.textContent='Lunas';
-    payBtn.onclick=()=>{ if(confirm('Tandai hutang sebagai lunas?')){ debts=debts.filter(x=>x.id!==d.id); localStorage.setItem('debts',JSON.stringify(debts)); updateDebtList(); updateBalance(); updateSummary(); }};
+    payBtn.onclick=()=>{ if(confirm('Tandai hutang sebagai lunas?')){ debts=debts.filter(x=>x.id!==d.id); localStorage.setItem('debts',JSON.stringify(debts)); updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary(); }};
     const editBtn=document.createElement('button');
     editBtn.className='btn-small'; editBtn.textContent='✏️ Edit';
     editBtn.onclick=()=>editDebt(d.id);
@@ -276,7 +276,7 @@ function editDebt(id){
   document.getElementById('debtDate').value=debt.date;
   debts=debts.filter(d=>d.id!==id);
   localStorage.setItem('debts',JSON.stringify(debts));
-  updateDebtList(); updateBalance(); updateSummary();
+  updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary();
   alert("Silakan edit data hutang lalu klik 'Simpan Hutang'");
 }
 
@@ -284,7 +284,7 @@ function deleteDebt(id){
   if(!confirm("Yakin mau hapus hutang ini?")) return;
   debts=debts.filter(d=>d.id!==id);
   localStorage.setItem('debts',JSON.stringify(debts));
-  updateDebtList(); updateBalance(); updateSummary();
+  updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary();
 }
 
 /* ---------------- HARIAN ---------------- */
