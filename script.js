@@ -109,7 +109,7 @@ function handleTransfer(e){
     date:new Date().toISOString().split('  localStorage.setItem('transactions',JSON.stringify(transactions));
   document.getElementById('transferForm').reset();
   updateBalance(); updateTransactionList(); updateDailyView(); updateSummary(); updateCategorySummary();
-  alert('Transfer berhasil disimpan!');  alert('Transfer berhasil disimpan!');mmary();
+  alert('Transfer berhasil disimpan!');
   alert('Transfer berhasil disimpan!');
 }
 
@@ -128,8 +128,10 @@ function handleDebtSubmit(e){
   debts.push(debt);
   localStorage.setItem('debts',JSON.stringify(debts));
   document.getElementById('debtForm').reset();
-  document.getElem  updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary();
-  alert('Hutang berhasil disimpan!');teBalance(); updateSummary();
+  document.getElementById('debtForm').reset();
+  document.getElementById('debtDate').value=new Date().toISOString().split('T')[0];
+  updateDebtList(); updateBalance(); updateSummary(); updateCategorySummary();
+  alert('Hutang berhasil disimpan!');
   alert('Hutang berhasil disimpan!');
 }
 
