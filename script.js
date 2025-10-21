@@ -106,12 +106,10 @@ function handleTransfer(e){
   const transfer={
     id:Date.now(), type:'transfer', from,to, amount,
     description:`Transfer ${from} → ${to}`,
-    date:new Date().toISOString().split('T')[0]
-  };
-  transactions.push(transfer);
-  localStorage.setItem('transactions',JSON.stringify(transactions));
-  do  updateBalance(); updateTransactionList(); updateDailyView(); updateSummary(); updateCategorySummary();
-  alert('Transfer berhasil disimpan!');mmary();
+    date:new Date().toISOString().split('  localStorage.setItem('transactions',JSON.stringify(transactions));
+  document.getElementById('transferForm').reset();
+  updateBalance(); updateTransactionList(); updateDailyView(); updateSummary(); updateCategorySummary();
+  alert('Transfer berhasil disimpan!');  alert('Transfer berhasil disimpan!');mmary();
   alert('Transfer berhasil disimpan!');
 }
 
