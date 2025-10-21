@@ -5,12 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catatan Keuangan</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>💰 Catatan Keuangan</h1>
-      <p>Kelola keuanganmu dengan mudah</p>
+      <div class="header-content">
+        <div class="header-left">
+          <h1><i class="fas fa-wallet"></i> Catatan Keuangan</h1>
+          <p>Kelola keuanganmu dengan mudah dan cerdas</p>
+        </div>
+        <div class="header-right">
+          <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </div>>
     </div>
 
     <!-- Saldo Section -->
@@ -22,14 +33,59 @@
         <div class="balance-item"><div class="balance-label">Saldo Digital</div><div class="balance-amount" id="digitalBalance">Rp 0</div></div>
         <div class="balance-item"><div class="balance-label">Total Hutang</div><div class="balance-amount" id="totalDebt">Rp 0</div></div>
       </div>
+    <!-- Search & Filter Section -->
+    <div class="search-filter-section">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari transaksi...">
+        <button class="clear-search" id="clearSearch" style="display: none;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="filter-controls">
+        <select id="categoryFilter">
+          <option value="">Semua Kategori</option>
+        </select>
+        <select id="typeFilter">
+          <option value="">Semua Tipe</option>
+          <option value="income">Pemasukan</option>
+          <option value="expense">Pengeluaran</option>
+          <option value="transfer">Transfer</option>
+        </select>
+        <input type="date" id="dateFrom" placeholder="Dari">
+        <input type="date" id="dateTo" placeholder="Sampai">
+        <button class="filter-btn" id="applyFilter">
+          <i class="fas fa-filter"></i> Filter
+        </button>
+        <button class="clear-filter-btn" id="clearFilter">
+          <i class="fas fa-times"></i> Reset
+        </button>
+      </div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
-      <div class="tab active" onclick="showTab('transaction')">Transaksi</div>
-      <div class="tab" onclick="showTab('debt')">Hutang</div>
-      <div class="tab" onclick="showTab('daily')">Harian</div>
-      <div class="tab" onclick="showTab('summary')">Ringkasan</div>
+      <div class="tab active" onclick="showTab('transaction')">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Transaksi</span>
+      </div>
+      <div class="tab" onclick="showTab('debt')">
+        <i class="fas fa-credit-card"></i>
+        <span>Hutang</span>
+      </div>
+      <div class="tab" onclick="showTab('daily')">
+        <i class="fas fa-calendar-day"></i>
+        <span>Harian</span>
+      </div>
+      <div class="tab" onclick="showTab('summary')">
+        <i class="fas fa-chart-line"></i>
+        <span>Ringkasan</span>
+      </div>
+      <div class="tab" onclick="showTab('categories')">
+        <i class="fas fa-tags"></i>
+        <span>Kategori</span>
+      </div>
+    </div>an</div>
     </div>
 
     <!-- Transaction Tab -->
@@ -137,38 +193,178 @@
           <div class="summary-item"><div class="balance-label">Saldo Harian</div><div class="balance-amount" id="dailyBalance">Rp 0</div></div>
         </div>
       </div>
-      <div class="transaction-list">
-        <h3>Transaksi Hari Ini</h3>
-        <div id="dailyTransactionList"></div>
-      </div>
-    </div>
-
-    <!-- Summary Tab -->
+      <div class="transa    <!-- Summary Tab -->
     <div id="summaryTab" class="tab-content hidden">
-      <div class="form-section">
-        <h3>Ringkasan Mingguan</h3>
-        <div class="summary-grid">
-          <div class="summary-item"><div class="balance-label">Pemasukan</div><div class="balance-amount income" id="weekIncome">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Pengeluaran</div><div class="balance-amount expense" id="weekExpense">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Saldo</div><div class="balance-amount" id="weekBalance">Rp 0</div></div>
+      <div class="summary-tabs">
+        <div class="summary-tab active" onclick="showSummaryTab('weekly')">
+          <i class="fas fa-calendar-week"></i>
+          <span>Mingguan</span>
         </div>
-        <canvas id="weeklyChart"></canvas>
+        <div class="summary-tab" onclick="showSummaryTab('monthly')">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Bulanan</span>
+        </div>
+        <div class="summary-tab" onclick="showSummaryTab('yearly')">
+          <i class="fas fa-calendar"></i>
+          <span>Tahunan</span>
+        </div>
       </div>
 
-      <div class="form-section">
-        <h3>Ringkasan Bulanan</h3>
-        <div class="summary-grid">
-          <div class="summary-item"><div class="balance-label">Pemasukan</div><div class="balance-amount income" id="monthIncome">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Pengeluaran</div><div class="balance-amount expense" id="monthExpense">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Saldo</div><div class="balance-amount" id="monthBalance">Rp 0</div></div>
+      <div id="weeklySummary" class="summary-content">
+        <div class="summary-cards">
+          <div class="summary-card income">
+            <div class="card-icon"><i class="fas fa-arrow-up"></i></div>
+            <div class="card-content">
+              <div class="card-label">Pemasukan</div>
+              <div class="card-amount" id="weekIncome">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card expense">
+            <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
+            <div class="card-content">
+              <div class="card-label">Pengeluaran</div>
+              <div class="card-amount" id="weekExpense">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card balance">
+            <div class="card-icon"><i class="fas fa-wallet"></i></div>
+            <div class="card-content">
+              <div class="card-label">Saldo</div>
+              <div class="card-amount" id="weekBalance">Rp 0</div>
+            </div>
+          </div>
         </div>
-        <canvas id="monthlyChart"></canvas>
+        <div class="chart-container">
+          <canvas id="weeklyChart"></canvas>
+        </div>
+      </div>
+
+      <div id="monthlySummary" class="summary-content hidden">
+        <div class="summary-cards">
+          <div class="summary-card income">
+            <div class="card-icon"><i class="fas fa-arrow-up"></i></div>
+            <div class="card-content">
+              <div class="card-label">Pemasukan</div>
+              <div class="card-amount" id="monthIncome">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card expense">
+            <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
+            <div class="card-content">
+              <div class="card-label">Pengeluaran</div>
+              <div class="card-amount" id="monthExpense">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card balance">
+            <div class="card-icon"><i class="fas fa-wallet"></i></div>
+            <div class="card-content">
+              <div class="card-label">Saldo</div>
+              <div class="card-amount" id="monthBalance">Rp 0</div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="monthlyChart"></canvas>
+        </div>
+      </div>
+
+      <div id="yearlySummary" class="summary-content hidden">
+        <div class="summary-cards">
+          <div class="summary-card income">
+            <div class="card-icon"><i class="fas fa-arrow-up"></i></div>
+            <div class="card-content">
+              <div class="card-label">Pemasukan</div>
+              <div class="card-amount" id="yearIncome">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card expense">
+            <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
+            <div class="card-content">
+              <div class="card-label">Pengeluaran</div>
+              <div class="card-amount" id="yearExpense">Rp 0</div>
+            </div>
+          </div>
+          <div class="summary-card balance">
+            <div class="card-icon"><i class="fas fa-wallet"></i></div>
+            <div class="card-content">
+              <div class="card-label">Saldo</div>
+              <div class="card-amount" id="yearBalance">Rp 0</div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="yearlyChart"></canvas>
+        </div>
       </div>
     </div>
 
+    <!-- Categories Tab -->
+    <div id="categoriesTab" class="tab-content hidden">
+      <div class="form-section">
+        <h3><i class="fas fa-tags"></i> Ringkasan Per Kategori</h3>
+        <div class="category-summary" id="categorySummary">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3><i class="fas fa-chart-pie"></i> Distribusi Pengeluaran</h3>
+        <div class="chart-container">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><i class="fas fa-bullseye"></i> Target Anggaran</h3>
+        <div class="budget-targets" id="budgetTargets">
+          <!-- Will be populated by JavaScript -->
+        </div>
+        <button class="add-budget-btn" onclick="showAddBudgetModal()">
+          <i class="fas fa-plus"></i> Tambah Target Anggaran
+        </button>
+      </div>
+    </div>iv class="balance-amount"  </div>
+
+  <!-- Budget Modal -->
+  <div id="budgetModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-bullseye"></i> Tambah Target Anggaran</h3>
+        <button class="close-modal" onclick="closeBudgetModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="budgetForm">
+        <div class="form-group">
+          <label for="budgetCategory">Kategori</label>
+          <select id="budgetCategory" required>
+            <option value="">Pilih Kategori</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="budgetAmount">Target Anggaran (Rp)</label>
+          <input type="number" id="budgetAmount" required placeholder="Masukkan target anggaran">
+        </div>
+        <div class="form-group">
+          <label for="budgetPeriod">Periode</label>
+          <select id="budgetPeriod" required>
+            <option value="monthly">Bulanan</option>
+            <option value="weekly">Mingguan</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeBudgetModal()">Batal</button>
+          <button type="submit" class="btn-primary">Simpan Target</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- import Chart.js dan script utama -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>pt utama -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
