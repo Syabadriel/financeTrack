@@ -1147,3 +1147,138 @@ button:active {
     justify-content: space-between; /* Untuk memastikan tombol aksi terlihat jelas */
   }
 }
+
+/* =========================================
+   🛡️ RESPONSIVE PROTECTION PATCH (Mobile Safe)
+   Versi: Syaba Fix - Desktop 100% preserved
+   Fungsi: Menjaga tampilan agar tidak rusak di layar kecil
+========================================= */
+
+/* Tablet Layout */
+@media (max-width: 768px) {
+  /* Header jadi vertikal */
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  /* Pastikan grid/card tetap proporsional */
+  .balance-item,
+  .card,
+  .summary-card,
+  .transaction-item {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Tab biar gak pecah ke dua baris sempit */
+  .tabs, .summary-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tab, .summary-tab {
+    flex: 1 1 calc(50% - 0.5rem);
+    text-align: center;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .filter-controls input,
+  .filter-controls select {
+    width: 100%;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 480px) {
+  /* Header teks dan tombol rapi ke bawah */
+  .header-left h1 {
+    font-size: 1.4rem !important;
+    text-align: center;
+  }
+
+  .header-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .theme-toggle {
+    align-self: center;
+  }
+
+  /* Semua grid jadi 1 kolom */
+  .grid,
+  .balance-grid,
+  .summary-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tab, button, form elemen melebar penuh */
+  .tab, .summary-tab, button {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+  }
+
+  /* Input aman di layar sempit */
+  input, select, textarea {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Margin dan padding disesuaikan */
+  .container {
+    padding: 0.8rem;
+    width: 100%;
+  }
+
+  /* Pastikan card dan list gak keluar layar */
+  .transaction-item,
+  .balance-item,
+  .summary-card {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  /* Hindari teks mepet */
+  .card h3, .transaction-item h3, .summary-card h3 {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  /* Tombol dan link rapi tengah */
+  .actions, .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+  }
+}
+
+/* Extra Safe Zone untuk HP kecil (≤360px) */
+@media (max-width: 360px) {
+  body {
+    font-size: 0.9rem;
+  }
+
+  .header-left h1 {
+    font-size: 1.2rem !important;
+  }
+
+  .tab, .summary-tab {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  button {
+    font-size: 0.85rem;
+    padding: 0.7rem;
+  }
+}
