@@ -5,16 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catatan Keuangan</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>💰 Catatan Keuangan</h1>
-      <p>Kelola keuanganmu dengan mudah</p>
-    </div>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1><i class="fas fa-wallet"></i> Catatan Keuangan</h1>
+          <p>Kelola keuanganmu dengan mudah dan cerdas</p>
+        </div>
+        <div class="header-right">
+          <button class="theme-toggle" id="themeToggle" title="Ganti Tema">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </header>
 
-    <!-- Saldo Section -->
-    <div class="balance-section">
+    <!-- Ringkasan Saldo -->
+    <section class="balance-section">
       <h2>Ringkasan Saldo</h2>
       <div class="balance-grid">
         <div class="balance-item"><div class="balance-label">Total Saldo</div><div class="balance-amount" id="totalBalance">Rp 0</div></div>
@@ -22,18 +33,43 @@
         <div class="balance-item"><div class="balance-label">Saldo Digital</div><div class="balance-amount" id="digitalBalance">Rp 0</div></div>
         <div class="balance-item"><div class="balance-label">Total Hutang</div><div class="balance-amount" id="totalDebt">Rp 0</div></div>
       </div>
-    </div>
+    </section>
+
+    <!-- Search & Filter -->
+    <section class="search-filter-section">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari transaksi...">
+        <button class="clear-search" id="clearSearch" style="display:none;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="filter-controls">
+        <select id="categoryFilter"><option value="">Semua Kategori</option></select>
+        <select id="typeFilter">
+          <option value="">Semua Tipe</option>
+          <option value="income">Pemasukan</option>
+          <option value="expense">Pengeluaran</option>
+          <option value="transfer">Transfer</option>
+        </select>
+        <input type="date" id="dateFrom">
+        <input type="date" id="dateTo">
+        <button class="filter-btn" id="applyFilter"><i class="fas fa-filter"></i> Filter</button>
+        <button class="clear-filter-btn" id="clearFilter"><i class="fas fa-times"></i> Reset</button>
+      </div>
+    </section>
 
     <!-- Tabs -->
-    <div class="tabs">
-      <div class="tab active" onclick="showTab('transaction')">Transaksi</div>
-      <div class="tab" onclick="showTab('debt')">Hutang</div>
-      <div class="tab" onclick="showTab('daily')">Harian</div>
-      <div class="tab" onclick="showTab('summary')">Ringkasan</div>
-    </div>
+    <nav class="tabs">
+      <div class="tab active" data-tab="transaction"><i class="fas fa-exchange-alt"></i><span>Transaksi</span></div>
+      <div class="tab" data-tab="debt"><i class="fas fa-credit-card"></i><span>Hutang</span></div>
+      <div class="tab" data-tab="daily"><i class="fas fa-calendar-day"></i><span>Harian</span></div>
+      <div class="tab" data-tab="summary"><i class="fas fa-chart-line"></i><span>Ringkasan</span></div>
+      <div class="tab" data-tab="categories"><i class="fas fa-tags"></i><span>Kategori</span></div>
+    </nav>
 
-    <!-- Transaction Tab -->
-    <div id="transactionTab" class="tab-content">
+    <!-- Transaksi -->
+    <section id="transactionTab" class="tab-content">
       <div class="form-section">
         <h3>Tambah Transaksi</h3>
         <form id="transactionForm">
@@ -54,9 +90,7 @@
           </div>
           <div class="form-group">
             <label for="transactionCategory">Kategori</label>
-            <select id="transactionCategory" required>
-              <option value="">Pilih Kategori</option>
-            </select>
+            <select id="transactionCategory" required><option value="">Pilih Kategori</option></select>
           </div>
           <div class="form-group">
             <label for="transactionPayment">Metode Pembayaran</label>
@@ -73,28 +107,16 @@
         </form>
       </div>
 
-      <!-- Transfer antar saldo -->
       <div class="form-section">
         <h3>Transfer Antar Saldo</h3>
         <form id="transferForm">
-          <div class="form-group">
-            <label for="transferFrom">Dari</label>
-            <select id="transferFrom" required>
-              <option value="cash">Cash</option>
-              <option value="digital">Digital</option>
-            </select>
+          <div class="form-group"><label for="transferFrom">Dari</label>
+            <select id="transferFrom" required><option value="cash">Cash</option><option value="digital">Digital</option></select>
           </div>
-          <div class="form-group">
-            <label for="transferTo">Ke</label>
-            <select id="transferTo" required>
-              <option value="cash">Cash</option>
-              <option value="digital">Digital</option>
-            </select>
+          <div class="form-group"><label for="transferTo">Ke</label>
+            <select id="transferTo" required><option value="cash">Cash</option><option value="digital">Digital</option></select>
           </div>
-          <div class="form-group">
-            <label for="transferAmount">Jumlah</label>
-            <input type="number" id="transferAmount" required placeholder="Masukkan jumlah">
-          </div>
+          <div class="form-group"><label for="transferAmount">Jumlah</label><input type="number" id="transferAmount" required placeholder="Masukkan jumlah"></div>
           <button type="submit">Transfer</button>
         </form>
       </div>
@@ -103,10 +125,10 @@
         <h3>Transaksi Terakhir</h3>
         <div id="transactionList"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- Debt Tab -->
-    <div id="debtTab" class="tab-content hidden">
+    <!-- Hutang -->
+    <section id="debtTab" class="tab-content hidden">
       <div class="form-section">
         <h3>Tambah Hutang</h3>
         <form id="debtForm">
@@ -121,54 +143,89 @@
         <h3>Daftar Hutang</h3>
         <div id="debtList"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- Daily Tab -->
-    <div id="dailyTab" class="tab-content hidden">
+    <!-- Harian -->
+    <section id="dailyTab" class="tab-content hidden">
       <div class="form-section">
         <h3>Pilih Tanggal</h3>
-        <div class="form-group"><input type="date" id="dailyDate" onchange="updateDailyView()"></div>
+        <input type="date" id="dailyDate">
       </div>
       <div class="daily-summary">
         <h3>Ringkasan Harian</h3>
         <div class="summary-grid">
-          <div class="summary-item"><div class="balance-label">Total Pemasukan</div><div class="balance-amount income" id="dailyIncome">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Total Pengeluaran</div><div class="balance-amount expense" id="dailyExpense">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Saldo Harian</div><div class="balance-amount" id="dailyBalance">Rp 0</div></div>
+          <div class="summary-item"><div class="balance-label">Pemasukan</div><div class="balance-amount income" id="dailyIncome">Rp 0</div></div>
+          <div class="summary-item"><div class="balance-label">Pengeluaran</div><div class="balance-amount expense" id="dailyExpense">Rp 0</div></div>
+          <div class="summary-item"><div class="balance-label">Saldo</div><div class="balance-amount" id="dailyBalance">Rp 0</div></div>
         </div>
       </div>
       <div class="transaction-list">
         <h3>Transaksi Hari Ini</h3>
         <div id="dailyTransactionList"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- Summary Tab -->
-    <div id="summaryTab" class="tab-content hidden">
-      <div class="form-section">
-        <h3>Ringkasan Mingguan</h3>
-        <div class="summary-grid">
-          <div class="summary-item"><div class="balance-label">Pemasukan</div><div class="balance-amount income" id="weekIncome">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Pengeluaran</div><div class="balance-amount expense" id="weekExpense">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Saldo</div><div class="balance-amount" id="weekBalance">Rp 0</div></div>
-        </div>
+    <!-- Ringkasan -->
+    <section id="summaryTab" class="tab-content hidden">
+      <div class="summary-tabs">
+        <div class="summary-tab active" onclick="showSummaryTab('weekly')"><i class="fas fa-calendar-week"></i>Mingguan</div>
+        <div class="summary-tab" onclick="showSummaryTab('monthly')"><i class="fas fa-calendar-alt"></i>Bulanan</div>
+        <div class="summary-tab" onclick="showSummaryTab('yearly')"><i class="fas fa-calendar"></i>Tahunan</div>
+      </div>
+
+      <div id="weeklySummary" class="summary-content">
         <canvas id="weeklyChart"></canvas>
       </div>
 
-      <div class="form-section">
-        <h3>Ringkasan Bulanan</h3>
-        <div class="summary-grid">
-          <div class="summary-item"><div class="balance-label">Pemasukan</div><div class="balance-amount income" id="monthIncome">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Pengeluaran</div><div class="balance-amount expense" id="monthExpense">Rp 0</div></div>
-          <div class="summary-item"><div class="balance-label">Saldo</div><div class="balance-amount" id="monthBalance">Rp 0</div></div>
-        </div>
+      <div id="monthlySummary" class="summary-content hidden">
         <canvas id="monthlyChart"></canvas>
       </div>
-    </div>
 
+      <div id="yearlySummary" class="summary-content hidden">
+        <canvas id="yearlyChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Kategori & Anggaran -->
+    <section id="categoriesTab" class="tab-content hidden">
+      <div class="form-section">
+        <h3><i class="fas fa-tags"></i> Ringkasan Per Kategori</h3>
+        <div id="categorySummary"></div>
+      </div>
+      <div class="form-section">
+        <h3><i class="fas fa-chart-pie"></i> Distribusi Pengeluaran</h3>
+        <canvas id="categoryChart"></canvas>
+      </div>
+      <div class="form-section">
+        <h3><i class="fas fa-bullseye"></i> Target Anggaran</h3>
+        <div id="budgetTargets"></div>
+        <button class="add-budget-btn" onclick="showAddBudgetModal()"><i class="fas fa-plus"></i> Tambah Target</button>
+      </div>
+    </section>
   </div>
 
-  <!-- import Chart.js dan script utama -->
+  <!-- Modal Tambah Target -->
+  <div id="budgetModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-bullseye"></i> Tambah Target Anggaran</h3>
+        <button class="close-modal" onclick="closeBudgetModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="budgetForm">
+        <div class="form-group"><label for="budgetCategory">Kategori</label><select id="budgetCategory" required><option value="">Pilih</option></select></div>
+        <div class="form-group"><label for="budgetAmount">Nominal (Rp)</label><input type="number" id="budgetAmount" required></div>
+        <div class="form-group"><label for="budgetPeriod">Periode</label>
+          <select id="budgetPeriod" required><option value="monthly">Bulanan</option><option value="weekly">Mingguan</option></select>
+        </div>
+        <div class="form-actions">
+          <button type="button" onclick="closeBudgetModal()">Batal</button>
+          <button type="submit">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
